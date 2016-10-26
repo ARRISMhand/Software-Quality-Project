@@ -274,11 +274,16 @@ public class Client implements Serializable {
          * le cas
          * @see #peutEmprunter()
          */
+<<<<<<< HEAD
         public void emprunter(FicheEmprunt emprunt) throws OperationImpossible{
                 if (emprunt == null)
                         throw new OperationImpossible("emprunt is null");
                 if (!peutEmprunter())
                         throw new OperationImpossible("Can note borrow");
+=======
+        public void emprunter(FicheEmprunt emprunt) { // On peut emprunter plus que la limite avec cette méthode (pas de assert)
+                boolean bool = peutEmprunter();
+>>>>>>> d436a61807f4910da14dd8283b80006d6c51564f
                 lesEmprunts.add(emprunt);
                 nbEmpruntsEffectues++;
                 nbEmpruntsEnCours++;

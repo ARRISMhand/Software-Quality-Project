@@ -59,7 +59,6 @@ public class Genre implements Serializable{
          */
         public void modifier(String nouveau){
                 nom = nouveau;
-        }
 
         public int getNbEmprunts(){
                 return nbEmprunts;
