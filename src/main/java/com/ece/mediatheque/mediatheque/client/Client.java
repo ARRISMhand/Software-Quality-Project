@@ -276,7 +276,7 @@ public class Client implements Serializable {
          * le cas
          * @see #peutEmprunter()
          */
-        public void emprunter(FicheEmprunt emprunt) {
+        public void emprunter(FicheEmprunt emprunt) { // On peut emprunter plus que la limite avec cette méthode (pas de assert)
                 boolean bool = peutEmprunter();
                 lesEmprunts.add(emprunt);
                 nbEmpruntsEffectues++;
