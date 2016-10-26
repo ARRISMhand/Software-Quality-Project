@@ -113,8 +113,7 @@ public class Client implements Serializable {
          *    @param nom Nom du client
          *    @param prenom Prenom du client
          */
-        public Client(String nom, String prenom)
-        {
+        public Client(String nom, String prenom) {
                 this.nom = nom;
                 this.prenom = prenom;
         }
@@ -262,8 +261,7 @@ public class Client implements Serializable {
          *   @return vrai si l'emprunt est possible, faux sinon
          */
         public boolean peutEmprunter() {
-                if (nbEmpruntsDepasses > 0
-                                || nbEmpruntsEnCours >= nbMaxEmprunt()) {
+                if (nbEmpruntsDepasses > 0 || nbEmpruntsEnCours >= nbMaxEmprunt()) {
                         return false;
                 } else {
                         return true;
@@ -276,8 +274,11 @@ public class Client implements Serializable {
          * le cas
          * @see #peutEmprunter()
          */
-        public void emprunter(FicheEmprunt emprunt) {
-                boolean bool = peutEmprunter();
+        public void emprunter(FicheEmprunt emprunt) throws OperationImpossible{
+                if (emprunt == null)
+                        throw new OperationImpossible("emprunt is null");
+                if (!peutEmprunter())
+                        throw new OperationImpossible("Can note borrow");
                 lesEmprunts.add(emprunt);
                 nbEmpruntsEffectues++;
                 nbEmpruntsEnCours++;

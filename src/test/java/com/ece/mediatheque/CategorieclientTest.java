@@ -10,7 +10,7 @@ import org.junit.Test;
 public class CategorieclientTest {
 
     @Test
-    public void test_creat_categoreClient_with_nom_max_cot_coaefDuree_coefTarif_codeReducActif() {
+    public void test_create_categoreClient_with_nom_max_cot_coaefDuree_coefTarif_codeReducActif() {
         CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
         Assert.assertEquals("denis", categorieClient.getNom());
         Assert.assertEquals(1000, categorieClient.getNbEmpruntMax());
@@ -20,7 +20,7 @@ public class CategorieclientTest {
         Assert.assertTrue(categorieClient.getCodeReducUtilise());
     }
     @Test
-    public void test_creat_categoreClient_with_nom() {
+    public void test_create_categoreClient_with_nom() {
         CategorieClient categorieClient = new CategorieClient("denis");
         Assert.assertEquals("denis", categorieClient.getNom());
         Assert.assertEquals(0, categorieClient.getNbEmpruntMax());
