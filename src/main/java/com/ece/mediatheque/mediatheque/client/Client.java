@@ -274,16 +274,12 @@ public class Client implements Serializable {
          * le cas
          * @see #peutEmprunter()
          */
-<<<<<<< HEAD
         public void emprunter(FicheEmprunt emprunt) throws OperationImpossible{
                 if (emprunt == null)
                         throw new OperationImpossible("emprunt is null");
                 if (!peutEmprunter())
-                        throw new OperationImpossible("Can note borrow");
-=======
-        public void emprunter(FicheEmprunt emprunt) { // On peut emprunter plus que la limite avec cette méthode (pas de assert)
-                boolean bool = peutEmprunter();
->>>>>>> d436a61807f4910da14dd8283b80006d6c51564f
+                        throw new OperationImpossible("Can not borrow");
+
                 lesEmprunts.add(emprunt);
                 nbEmpruntsEffectues++;
                 nbEmpruntsEnCours++;
@@ -292,7 +288,7 @@ public class Client implements Serializable {
         /**
          * <TT>emprunter</TT> pour version de client sans collection
          */
-        public void emprunter() {
+        public void emprunter() { //TODO: Je vois pas l'utilité
                 assert peutEmprunter();
                 nbEmpruntsEffectues++;
                 nbEmpruntsEnCours++;
@@ -304,7 +300,7 @@ public class Client implements Serializable {
          * la classe Emprunt.
          *   @see FicheEmprunt#verifier()
          */
-        public void marquer() throws OperationImpossible {
+        public void marquer() throws OperationImpossible { //TODO : a tester
                 if(nbEmpruntsDepasses == nbEmpruntsEnCours){
                         throw new OperationImpossible("Impossible d'avoir plus d'emprunts en retard que d'emprunts : "+this);
                 }
@@ -330,12 +326,12 @@ public class Client implements Serializable {
          */
         public void restituer(boolean enRetard) throws OperationImpossible {
                 if(nbEmpruntsEnCours == 0){
-                        throw new OperationImpossible("Restituer sans emprunt "+ this);
+                        throw new OperationImpossible("Restituer sans emprunt "+ nbEmpruntsEnCours);
                 }
                 nbEmpruntsEnCours--;
                 if (enRetard) {
                         if(nbEmpruntsDepasses == 0){
-                                throw new OperationImpossible("Restituer en retard sans retard "+ this);
+                                throw new OperationImpossible("Restituer en retard sans retard "+ nbEmpruntsDepasses);
                         }
                         nbEmpruntsDepasses--;
                 }
@@ -520,5 +516,9 @@ public class Client implements Serializable {
          */
         static int getStat() {
                 return nbEmpruntsTotal;
+        }
+
+        public int getNbEmpruntsDepasses() {
+                return nbEmpruntsDepasses;
         }
 }

@@ -127,8 +127,9 @@ public class ClientTest { //TestNG for testing exceptions
             throws Exception {
         CategorieClient categorieClient = new CategorieClient("denis");
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
-        client.emprunter();
-        Assert.assertFalse(client.aDesEmpruntsEnCours());
+        FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
+        client.emprunter(mock);
+        Assert.assertTrue(client.aDesEmpruntsEnCours());
     }
 
     @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,
@@ -141,20 +142,88 @@ public class ClientTest { //TestNG for testing exceptions
     }
 
     @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,
-            expectedExceptionsMessageRegExp = "Can note borrow")
+            expectedExceptionsMessageRegExp = "Can not borrow")
     public void test_emprunter_with_peutEmprunter_false_should_throw_exception()
             throws Exception {
         CategorieClient categorieClient = new CategorieClient("denis");
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         client.emprunter();
         client.emprunter();
-// TODO: end this test
-        Mediatheque mediatheque = new Mediatheque("Mediatheque");
-        DocumentImpl document = new DocumentImpl("code", new Localisation("salle1", "rayon1"),
-                "Denis et les chévres", "Denis", "1993", new Genre("Histoire"));
-        DocumentImpl mock = Mockito.mock(DocumentImpl.class);
-        Mockito.when(mock.emprunter()).thenReturn(true);
-        FicheEmprunt ficheEmprunt = new FicheEmprunt(mediatheque, client, document);
+
+        FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
+        client.emprunter(mock);
+    }
+
+    @org.testng.annotations.Test
+    public void test_emprunter_2()
+            throws Exception {
+        CategorieClient categorieClient = new CategorieClient("denis");
+        Client client = new Client("Denis", "Denise", "Paris", categorieClient);
+
+        FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
+        client.emprunter(mock);
+        client.emprunter(mock);
+
+        Assert.assertEquals(2, client.getNbEmpruntsEnCours());
+        Assert.assertEquals(2, client.getNbEmpruntsEffectues());
+    }
+
+    @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Restituer sans emprunt 0")
+    public void test_restituer_input_false_AND_nbEmpruntsEnCours_0_should_throw_exception()
+            throws Exception {
+        CategorieClient categorieClient = new CategorieClient("denis");
+        Client client = new Client("Denis", "Denise", "Paris", categorieClient);
+        client.restituer(false);
+    }
+
+    @org.testng.annotations.Test
+    public void test_restituer_input_false_AND_nbEmpruntsEnCours_1()
+            throws Exception {
+        CategorieClient categorieClient = new CategorieClient("denis");
+        Client client = new Client("Denis", "Denise", "Paris", categorieClient);
+        FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
+        client.emprunter(mock);
+        client.emprunter(mock);
+
+        client.restituer(false);
+        Assert.assertEquals(1, client.getNbEmpruntsEnCours());
+        Assert.assertEquals(0, client.getNbEmpruntsDepasses());
+    }
+
+    @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Restituer en retard sans retard 0")
+    public void test_restituer_input_true_AND_nbEmpruntsDepasses_0_should_throw_exception()
+            throws Exception {
+        CategorieClient categorieClient = new CategorieClient("denis");
+        Client client = new Client("Denis", "Denise", "Paris", categorieClient);
+        FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
+        client.emprunter(mock);
+        client.emprunter(mock);
+
+        client.restituer(true);
+    }
+
+    @org.testng.annotations.Test
+    public void test_restituer_input_ture_AND_nbEmpruntsEnCours_1_nbEmpruntsDepasses_0()
+            throws Exception {
+        CategorieClient categorieClient = new CategorieClient("denis");
+        Client client = new Client("Denis", "Denise", "Paris", categorieClient);
+        FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
+        client.emprunter(mock);
+        client.emprunter(mock);
+        client.marquer();
+
+        client.restituer(true);
+        Assert.assertEquals(1, client.getNbEmpruntsEnCours());
+        Assert.assertEquals(1, client.getNbEmpruntsEnCours());
+        Assert.assertEquals(0, client.getNbEmpruntsDepasses());
+    }
+
+    @org.testng.annotations.Test
+    public void test_restiuer_with_FicheEmprunt()
+            throws Exception {
+
     }
 
 }

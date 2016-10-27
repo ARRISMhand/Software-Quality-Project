@@ -57,8 +57,9 @@ public class Genre implements Serializable{
          * modifier change le nom du genre il est accessible a la mediatheque seulement
          * @param nouveau nouveau nom
          */
-        public void modifier(String nouveau){
+        public void modifier(String nouveau) {
                 nom = nouveau;
+        }
 
         public int getNbEmprunts(){
                 return nbEmprunts;
