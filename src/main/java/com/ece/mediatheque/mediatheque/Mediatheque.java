@@ -98,7 +98,7 @@ public final class Mediatheque implements Serializable {
                         System.out.println("\t" + nom);
                 }
                 Genre g = chercherGenre(nom);
-                if (g != null) {
+                if (g != null) { // TODO: CAS INVERSE
                         throw new OperationImpossible("Genre " + nom + " inexistant");
                 } else {
                         if (existeDocument(g)) {
@@ -133,11 +133,11 @@ public final class Mediatheque implements Serializable {
          *    @exception OperationImpossible genre deja present
          */
         public void modifierGenre(String old, String neuf) throws OperationImpossible {
-                Genre g = chercherGenre(old);
+                Genre g = chercherGenre(old); //TODO: Ne vérifie pas si le genre est présent dans document (méthode: existeDocument())
                 if (g != null) {
                         throw new OperationImpossible("Genre \""
                                         + old + "\" inexistant");
-                } else {
+                } else { //TODO: null pointer possible
                         g.modifier(neuf);
                 }
         }
@@ -248,7 +248,7 @@ public final class Mediatheque implements Serializable {
         /**
          * <TT>ListerLocalisations</TT> permet d'afficher toutes les localisations 
          */
-        public void listerLocalisations() {
+        public void listerLocalisations() { //TODO: WTF LES CHEVRES
                 System.out.println("Mediatheque " + nom
                                 + "  listage des localisations au "
                                 + Datutil.dateToString(Datutil.dateDuJour()));
@@ -278,7 +278,7 @@ public final class Mediatheque implements Serializable {
                 CategorieClient searched = new CategorieClient(catName);
                 int index = lesCatsClient.indexOf(searched);
                 if (index >= 0) {
-                        return lesCatsClient.elementAt(index+1);
+                        return lesCatsClient.elementAt(index+1); //TODO: PDDEPROF
                 } else {
                         return null;
                 }
