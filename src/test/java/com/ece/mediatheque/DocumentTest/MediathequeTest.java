@@ -29,8 +29,8 @@ public class MediathequeTest {
         mediatheque.ajouterLocalisation("Principale", "Aventure");
         mediatheque.ajouterLocalisation("Principale", "Manga");
 
-        mediatheque.ajouterCatClient("Premium", 2, 5, 1.5, 1.5, false);
-        mediatheque.ajouterCatClient("TOP 5 CLIENT", 2000, 500, 15, 15, false);
+        mediatheque.ajouterCatClient("Premium", 2, 5, 1.5, 1.5, true);
+        mediatheque.ajouterCatClient("TOP 5 CLIENT", 2000, 500, 15, 15, true);
 
         mediatheque.ajouterDocument(new Livre("01010", new Localisation("Principale", "Aventure"), "titre", "auteur", "2000", new Genre("Guerre"), 258 ));
 
@@ -583,7 +583,7 @@ public class MediathequeTest {
     }
 
     @Test(expectedExceptions=OperationImpossible.class,
-            expectedExceptionsMessageRegExp = "Can not borrow")
+            expectedExceptionsMessageRegExp = "Client guerard non autorise a emprunter")
     public void test_mediatheque_emprunter_limiteEmpruntsClient() throws OperationImpossible, InvariantBroken {
 
         String nom = "guerard";
@@ -614,21 +614,50 @@ public class MediathequeTest {
         mediatheque.chercherDocument(code).metEmpruntable();
         ficheEmprunt = new FicheEmprunt(mediatheque, client, l);
 
-        code = "1323bd";
-        l = new Livre(code, localisation, titre, auteur, annee, genre, nombrePage);
-        mediatheque.ajouterDocument(l);
-        mediatheque.chercherDocument(code).metEmpruntable();
-        ficheEmprunt = new FicheEmprunt(mediatheque, client, l);
-
         mediatheque.emprunter(nom, prenom, "2222");
     }
 
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Document 1555ef inexistant")
+    public void test_mediatheque_emprunter_documentInconnu() throws OperationImpossible, InvariantBroken {
 
+        String nom = "guerard";
+        String prenom = "aurelien";
+        String code = "1555ef";
 
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
 
+        mediatheque.emprunter(nom, prenom, code);
+    }
 
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Document 01010 non empruntable")
+    public void test_mediatheque_emprunter_dcumentNonEmpruntable() throws OperationImpossible, InvariantBroken {
 
+        String nom = "guerard";
+        String prenom = "aurelien";
+        String code = "01010";
 
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        mediatheque.emprunter(nom, prenom, code);
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Document 01010 deja emprunte")
+    public void test_mediatheque_emprunter_dejaEmprunte() throws OperationImpossible, InvariantBroken {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+        String code = "01010";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        mediatheque.chercherDocument(code).metEmpruntable();
+
+        mediatheque.emprunter(nom, prenom, code);
+        mediatheque.emprunter(nom, prenom, code);
+    }
 
     @Test
     public void test_mediatheque_emprunter_OK() throws OperationImpossible, InvariantBroken {
@@ -642,7 +671,9 @@ public class MediathequeTest {
         mediatheque.chercherDocument(code).metEmpruntable();
         mediatheque.emprunter(nom, prenom, code);
 
+        Assert.assertTrue(mediatheque.chercherDocument(code).estEmpruntable());
         Assert.assertTrue(mediatheque.chercherDocument(code).estEmprunte());
     }
 
+    
 }
