@@ -69,6 +69,7 @@ public class Client implements Serializable {
          * Code de reduction
          */
         private int codeReduction = 0;
+
         /**
          * Date de l'inscription : la verification des droits
          * a la reduction est annuelle.
@@ -86,7 +87,7 @@ public class Client implements Serializable {
         public Client(String nom, String prenom, String adresse, CategorieClient catClient)
                         throws OperationImpossible {
                 initAttr(nom, prenom, adresse, catClient);
-                if (catClient.getCodeReducUtilise()) {
+                if (!catClient.getCodeReducUtilise()) {
                         throw new OperationImpossible("Call with client type " + this.catClient.getNom() + " and no reduction code");
                 }
         }
@@ -102,7 +103,7 @@ public class Client implements Serializable {
         public Client(String nom, String prenom, String adresse, CategorieClient catClient, int code)
                         throws OperationImpossible {
                 initAttr(nom, prenom, adresse, catClient);
-                if (catClient.getCodeReducUtilise()) {
+                if (!catClient.getCodeReducUtilise()) {
                         throw new OperationImpossible("Call with client type " + this.catClient.getNom() + " and reduction code");
                 }
                 this.codeReduction = code;
@@ -340,7 +341,7 @@ public class Client implements Serializable {
         /**
          * mise a jour des emprunts suite a un changement de categorie du client
          */
-        private void metAJourEmprunts() throws OperationImpossible {
+        private void metAJourEmprunts() throws OperationImpossible { //TODO: a tester
                 boolean res;
                 for (FicheEmprunt emprunt : lesEmprunts) {
                         res = emprunt.changementCategorie();
@@ -354,7 +355,7 @@ public class Client implements Serializable {
          * <TT>afficherStatistiques</TT> affiche les statistiques d'emprunt
          * par categorie de client.
          */
-        public static void afficherStatistiques() {
+        public static void afficherStatistiques() {//TODO: a tester
                 System.out.println("Nombre d'emprunt total des clients :" + nbEmpruntsTotal);
         }
 
@@ -362,9 +363,12 @@ public class Client implements Serializable {
          * <TT>afficherStatCli</TT> affiche les statistiques d'emprunt
          * du client.
          */
-        public void afficherStatCli() {
+        public String afficherStatCli() {
                 System.out.println("(stat) Nombre d'emprunts effectues par \"" + nom
                                 + "\" : " + nbEmpruntsEffectues);
+
+                return "(stat) Nombre d'emprunts effectues par \"" + nom
+                        + "\" : " + nbEmpruntsEffectues;
         }
 
         /**
@@ -391,7 +395,7 @@ public class Client implements Serializable {
          *   @return Date limite de restitution du document
          */
         public Date dateRetour(Date jour, int duree) {
-                duree = (int) ((double) duree * catClient.getCoefDuree());
+//                duree = (int) ((double) duree * catClient.getCoefDuree());
                 return Datutil.addDate(jour, duree);
         }
 
@@ -445,7 +449,7 @@ public class Client implements Serializable {
          */
         public void setCategorie(CategorieClient nCat)
                         throws OperationImpossible {
-                if (nCat.getCodeReducUtilise()) {
+                if (!nCat.getCodeReducUtilise()) {
                         throw new OperationImpossible("Categorie necessite un code de reduction");
                 }
                 catClient = nCat;
@@ -457,11 +461,10 @@ public class Client implements Serializable {
          */
         public void setCategorie(CategorieClient nCat, int reduc)
                         throws OperationImpossible {
-                if (nCat.getCodeReducUtilise()) {
-                        this.codeReduction = reduc;
-                } else {
+                if (!nCat.getCodeReducUtilise())
                         throw new OperationImpossible("Categorie sans code de reduction");
-                }
+
+                this.codeReduction = reduc;
                 catClient = nCat;
                 metAJourEmprunts();
         }
@@ -521,4 +524,9 @@ public class Client implements Serializable {
         public int getNbEmpruntsDepasses() {
                 return nbEmpruntsDepasses;
         }
+
+        public Vector<FicheEmprunt> getLesEmprunts() {
+                return lesEmprunts;
+        }
+
 }
