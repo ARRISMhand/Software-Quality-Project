@@ -1,4 +1,4 @@
-package com.ece.mediatheque;
+package com.ece.mediatheque.clientTest;
 
 import com.ece.mediatheque.mediatheque.*;
 import com.ece.mediatheque.mediatheque.client.CategorieClient;
