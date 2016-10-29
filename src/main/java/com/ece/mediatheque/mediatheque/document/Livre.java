@@ -105,8 +105,8 @@ public final class Livre extends Document {
          */
         @Override
         public String toString() {
-                return "[Livre] " + super.toString()
-                                +  " " + nombrePages;
+                return "[Livre] "/* + super.toString()
+                                +  " " + nombrePages*/;
         }
 
         /**

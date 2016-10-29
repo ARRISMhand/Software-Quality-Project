@@ -98,7 +98,7 @@ public final class Mediatheque implements Serializable {
                         System.out.println("\t" + nom);
                 }
                 Genre g = chercherGenre(nom);
-                if (g != null) { // TODO: CAS INVERSE
+                if (g == null) {
                         throw new OperationImpossible("Genre " + nom + " inexistant");
                 } else {
                         if (existeDocument(g)) {
@@ -134,7 +134,7 @@ public final class Mediatheque implements Serializable {
          */
         public void modifierGenre(String old, String neuf) throws OperationImpossible {
                 Genre g = chercherGenre(old); //TODO: Ne vérifie pas si le genre est présent dans document (méthode: existeDocument())
-                if (g != null) {
+                if (g == null) {
                         throw new OperationImpossible("Genre \""
                                         + old + "\" inexistant");
                 } else { //TODO: null pointer possible
@@ -176,7 +176,7 @@ public final class Mediatheque implements Serializable {
                         System.out.println("Mediatheque: suppression d'une localisation.");
                         System.out.println("\t" + salle + "\t" + rayon);
                 }
-                Localisation l = chercherLocalisation(rayon, salle);
+                Localisation l = chercherLocalisation(salle, rayon);
                 if (l == null){
                         throw new OperationImpossible("Localisation " + salle + " " +
                                         rayon + " inexistant");
@@ -278,7 +278,7 @@ public final class Mediatheque implements Serializable {
                 CategorieClient searched = new CategorieClient(catName);
                 int index = lesCatsClient.indexOf(searched);
                 if (index >= 0) {
-                        return lesCatsClient.elementAt(index+1); //TODO: PDDEPROF
+                        return lesCatsClient.elementAt(index);
                 } else {
                         return null;
                 }
@@ -297,10 +297,10 @@ public final class Mediatheque implements Serializable {
                 }
                 CategorieClient c = chercherCatClient(catName);
                 if (c == null) {
-                        throw new OperationImpossible("Categorie " + nom + " inexistante");
+                        throw new OperationImpossible("Categorie " + catName + " inexistante");
                 } else {
                         if (existeClient(c)) {
-                                throw new OperationImpossible("Il existe un client dans la categorie " + nom);
+                                throw new OperationImpossible("Il existe un client dans la categorie " + catName);
                         }
                         lesCatsClient.removeElement(c);
                         System.out.println("Mediatheque: Categorie \"" + nom + "\" retire");
@@ -354,29 +354,29 @@ public final class Mediatheque implements Serializable {
                         throw new OperationImpossible("Categorie client \""
                                         + co.getNom() + "\" inexistante");
                 } else {
-                        if (!co.getNom().equals(name)) {
-                                co.modifierNom(name);
+                        if (!c.getNom().equals(name)) {
+                                c.modifierNom(name);
                         }
-                        if (co.getNbEmpruntMax() != max) {
-                                co.modifierMax(max);
+                        if (c.getNbEmpruntMax() != max) {
+                                c.modifierMax(max);
                         }
-                        if (co.getCotisation() != cot) {
-                                co.modifierCotisation(cot);
+                        if (c.getCotisation() != cot) {
+                                c.modifierCotisation(cot);
                         }
-                        if (co.getCoefDuree() != coefDuree) {
-                                co.modifierCoefDuree(coefDuree);
+                        if (c.getCoefDuree() != coefDuree) {
+                                c.modifierCoefDuree(coefDuree);
                         }
-                        if (co.getCoefTarif() != coefTarif) {
-                                co.modifierCoefTarif(coefTarif);
+                        if (c.getCoefTarif() != coefTarif) {
+                                c.modifierCoefTarif(coefTarif);
                         }
-                        if (co.getCodeReducUtilise() != codeReducUsed) {
-                                co.modifierCodeReducActif(codeReducUsed);
+                        if (c.getCodeReducUtilise() != codeReducUsed) {
+                                c.modifierCodeReducActif(codeReducUsed);
                         }
                 }
                 return c;
         }
 
-        public void listerCatsClient() {
+        public void listerCatsClient() { //TODO: WTF LES ANESSES
                 if(debug)
                         System.out.println("Mediatheque " + nom +
                                         "  listage des categories de clients " +
@@ -385,7 +385,7 @@ public final class Mediatheque implements Serializable {
                         System.out.println(c);
                 }
         }
-        public CategorieClient getCategorieAt(int n) {
+        public CategorieClient getCategorieAt(int n) { //TODO: A tester
                 Enumeration<CategorieClient> e = lesCatsClient.elements();
                 int i;
                 CategorieClient c = null;
@@ -490,7 +490,7 @@ public final class Mediatheque implements Serializable {
         /**
          * <TT>listerDocuments</TT> affiche les documents en cours
          */
-        public void listerDocuments() {
+        public void listerDocuments() { //TODO: A faire
                 if(debug){
                         System.out.println("Mediatheque " + nom +"  listage des documents au " +
                                         Datutil.dateToString(Datutil.dateDuJour()));
@@ -543,7 +543,7 @@ public final class Mediatheque implements Serializable {
                 return false;
         }
 
-        public Document getDocumentAt(int n) {
+        public Document getDocumentAt(int n) { //TODO: à tester
                 Enumeration<Document> e = lesDocuments.elements();
                 int i;
                 Document d = null;
@@ -598,9 +598,9 @@ public final class Mediatheque implements Serializable {
                         throw new OperationImpossible("Document " + doc.getCode()
                                         + " deja emprunte");
                 }
-                FicheEmprunt emprunt = new FicheEmprunt(this, client, doc);
+                FicheEmprunt emprunt = new FicheEmprunt(this, client, doc); //TODO: Ne modifie pas la variable doc.estEmprunte()
                 lesEmprunts.addElement(emprunt);
-                return;
+                return; // TODO: ???
         }
 
         /**
