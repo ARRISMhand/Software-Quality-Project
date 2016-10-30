@@ -598,7 +598,7 @@ public final class Mediatheque implements Serializable {
                         throw new OperationImpossible("Document " + doc.getCode()
                                         + " deja emprunte");
                 }
-                FicheEmprunt emprunt = new FicheEmprunt(this, client, doc); //TODO: Ne modifie pas la variable doc.estEmprunte()
+                FicheEmprunt emprunt = new FicheEmprunt(this, client, doc);
                 lesEmprunts.addElement(emprunt);
                 return; // TODO: ???
         }
@@ -642,7 +642,7 @@ public final class Mediatheque implements Serializable {
          * Chaque emprunt detecte depasse pour la premiere fois provoque
          * l'impression d'une lettre de rappel au client.
          */
-        public void verifier(){
+        public void verifier(){//TODO: a tester
                 if(debug){
                         System.out.println("Mediatheque: verification le " +
                                         Datutil.dateToString(Datutil.dateDuJour()));
@@ -660,7 +660,7 @@ public final class Mediatheque implements Serializable {
         /**
          * <TT>listerFicheEmprunts</TT> affiche les emprunts en cours
          */
-        public void listerFicheEmprunts() {
+        public void listerFicheEmprunts() {//TODO: a tester
                 if(debug)
                         System.out.println("Mediatheque " + nom +"  listage des empruts au " +
                                         Datutil.dateToString(Datutil.dateDuJour()));
@@ -887,7 +887,7 @@ public final class Mediatheque implements Serializable {
         /**
          * <TT>listerClients</TT> affiche les Clients en cours
          */
-        public void listerClients() {
+        public void listerClients() { //TODO: A tester
                 System.out.println("Mediatheque " + nom + "  listage des clients au "
                                 + Datutil.dateToString(Datutil.dateDuJour()));
                 if (lesClients.isEmpty()) {
@@ -914,7 +914,7 @@ public final class Mediatheque implements Serializable {
                 return false;
         }
 
-        public Client getClientAt(int n) {
+        public Client getClientAt(int n) { // TODO: a tester
                 int i;
                 Collection<Client> colClient = lesClients.values();
                 Iterator<Client> ic = colClient.iterator();
@@ -935,7 +935,7 @@ public final class Mediatheque implements Serializable {
 
         public Client findClient(String nom, String prenom) {
                 return chercherClient(nom, prenom);
-        }
+        } // TODO: inutile
 
         //Affichage du contenu des vecteurs
         /**

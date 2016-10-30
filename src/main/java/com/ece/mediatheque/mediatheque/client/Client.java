@@ -87,9 +87,9 @@ public class Client implements Serializable {
         public Client(String nom, String prenom, String adresse, CategorieClient catClient)
                         throws OperationImpossible {
                 initAttr(nom, prenom, adresse, catClient);
-                if (!catClient.getCodeReducUtilise()) {
-                        throw new OperationImpossible("Call with client type " + this.catClient.getNom() + " and no reduction code");
-                }
+//                if (!catClient.getCodeReducUtilise()) {
+//                        throw new OperationImpossible("Call with client type " + this.catClient.getNom() + " and no reduction code");
+//                }
         }
 
         /**
@@ -449,10 +449,11 @@ public class Client implements Serializable {
          */
         public void setCategorie(CategorieClient nCat)
                         throws OperationImpossible {
-                if (!nCat.getCodeReducUtilise()) {
+                if (nCat.getCodeReducUtilise()) {
                         throw new OperationImpossible("Categorie necessite un code de reduction");
                 }
                 catClient = nCat;
+                this.codeReduction = 0; // Reset à 0 le codeReduction
                 metAJourEmprunts();
         }
 
