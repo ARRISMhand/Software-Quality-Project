@@ -31,11 +31,15 @@ public class MediathequeTest {
 
         mediatheque.ajouterCatClient("Premium", 2, 5, 1.5, 1.5, true);
         mediatheque.ajouterCatClient("TOP 5 CLIENT", 2000, 500, 15, 15, true);
+        mediatheque.ajouterCatClient("TOP 10 CLIENT", 2000, 500, 15, 15, false);
+        mediatheque.ajouterCatClient("TOP 15 CLIENT", 300, 20, 10, 10, false);
 
         mediatheque.ajouterDocument(new Livre("01010", new Localisation("Principale", "Aventure"), "titre", "auteur", "2000", new Genre("Guerre"), 258 ));
+        mediatheque.ajouterDocument(new Livre("010111", new Localisation("Principale", "Aventure"), "essay", "dupont", "2000", new Genre("Guerre"), 258 ));
 
         mediatheque.inscrire("guerard", "aurelien", "50 rue etienne dolet", "Premium", 10);
         mediatheque.inscrire("Denis", "Marchant", "50 rue des poulets", "TOP 5 CLIENT", 20);
+        mediatheque.inscrire("georgel", "edgar", "rue de la montagne", "TOP 15 CLIENT");
 
         mediatheque.saveToFile();
     }
@@ -297,7 +301,7 @@ public class MediathequeTest {
     }
 
     @Test
-    public void test_mediatheque_chercherClient_OK() {
+    public void test_mediatheque_chercherCatClient_OK() {
 
         String nom = "Premium";
         Mediatheque mediatheque = new Mediatheque("mediatheque");
@@ -389,7 +393,7 @@ public class MediathequeTest {
     }
 
     @Test
-    public void test_mediatheque_modifierCatClient_memeCatClient() throws OperationImpossible {
+    public void test_mediatheque_modifierCatClient_CatClientIdentique() throws OperationImpossible {
 
         String name = "Premium";
         int max = 2;
@@ -669,11 +673,378 @@ public class MediathequeTest {
         Mediatheque mediatheque = new Mediatheque("mediatheque");
 
         mediatheque.chercherDocument(code).metEmpruntable();
+
+        Assert.assertFalse(mediatheque.chercherDocument(code).estEmprunte());
         mediatheque.emprunter(nom, prenom, code);
 
         Assert.assertTrue(mediatheque.chercherDocument(code).estEmpruntable());
         Assert.assertTrue(mediatheque.chercherDocument(code).estEmprunte());
     }
 
-    
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Client dupont christian inexistant")
+    public void test_mediatheque_restituer_clientInconnu() throws OperationImpossible, InvariantBroken {
+
+        String nom = "dupont";
+        String prenom = "christian";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        mediatheque.restituer(nom, prenom, "2222");
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Document 1555ef inexistant")
+    public void test_mediatheque_restituer_documentInconnu() throws OperationImpossible, InvariantBroken {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+        String code = "1555ef";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        mediatheque.restituer(nom, prenom, code);
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Emprunt par \"guerard\" de \"010111\" non trouve")
+    public void test_mediatheque_restituer_empruntNonTrouve() throws OperationImpossible, InvariantBroken {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+        String code = "01010";
+
+        String nom2 = "guerard2";
+        String prenom2 = "aurel2ien";
+        String code2 = "010111";
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.inscrire(nom2, prenom2, "rue", "Premium");
+        mediatheque.chercherDocument(code).metEmpruntable();
+        mediatheque.chercherDocument(code2).metEmpruntable();
+        mediatheque.emprunter(nom, prenom, code);
+        mediatheque.emprunter(nom2, prenom2, code2);
+        mediatheque.restituer(nom, prenom, code2);
+    }
+
+    @Test
+    public void test_mediatheque_restituer_OK() throws OperationImpossible, InvariantBroken {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+        String code = "01010";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        mediatheque.chercherDocument(code).metEmpruntable();
+        mediatheque.emprunter(nom, prenom, code);
+
+
+        Assert.assertTrue(mediatheque.chercherDocument(code).estEmprunte());
+
+        mediatheque.restituer(nom, prenom, code);
+
+        Assert.assertFalse(mediatheque.chercherDocument(code).estEmprunte());
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Pas de categorie client CatInconnue")
+    public void test_mediatheque_inscire_catClientInconnue() throws OperationImpossible {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.inscrire("nom", "prenom", "rue", "CatInconnue");
+    }
+
+    @Test
+    public void test_mediatheque_inscrire_sansCode_OK() throws OperationImpossible {
+
+        String nom = "gorge";
+        String prenom = "jyli";
+        String addresse = "rue";
+
+        String cat = "inscriptionSansCode";
+        int max = 16;
+        double cot = 500;
+        double coefDuree = 15;
+        double coefTarif = 15;
+        boolean codeReducUsed = false;
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.ajouterCatClient(cat, max, cot, coefDuree, coefTarif,codeReducUsed);
+
+        Assert.assertTrue(mediatheque.inscrire(nom, prenom, addresse, cat) == cot);
+        Assert.assertTrue(mediatheque.chercherClient(nom, prenom) != null);
+    }
+
+    @Test
+    public void test_mediatheque_inscrire_avecCode_OK() throws OperationImpossible {
+
+        String nom = "gorge";
+        String prenom = "joel";
+        String addresse = "rue";
+
+        String cat = "inscriptionSansCode";
+        int max = 2000;
+        double cot = 500;
+        double coefDuree = 20;
+        double coefTarif = 15;
+        boolean codeReducUsed = true;
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.ajouterCatClient(cat, max, cot, coefDuree, coefTarif,codeReducUsed);
+
+        Assert.assertTrue(mediatheque.inscrire(nom, prenom, addresse, cat, 20) == cot);
+        Assert.assertTrue(mediatheque.chercherClient(nom, prenom) != null);
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Client guerard aurelien deja existant")
+    public void test_mediatheque_inscrire_dejaExistant() throws OperationImpossible {
+        String nom = "guerard";
+        String prenom = "aurelien";
+        String addresse = "rue";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.inscrire(nom, prenom, addresse, "Premium", 20);
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Client nom prenom inexistant")
+    public void test_mediatheque_resilier_clientInconnue() throws OperationImpossible {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.resilier("nom", "prenom");
+    }
+
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Client guerard aurelien n'a pas restitue tous ses emprunts")
+    public void test_mediatheque_resilier_empruntsEnCours() throws OperationImpossible {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        mediatheque.chercherClient(nom, prenom).emprunter();
+
+        mediatheque.resilier(nom, prenom);
+    }
+
+    @Test
+    public void test_mediatheque_resilier_OK() throws OperationImpossible {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.resilier(nom, prenom);
+
+        Assert.assertNull(mediatheque.chercherClient(nom, prenom));
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Client nom prenom inexistant")
+    public void test_mediatheque_modifierClient_clientInexistant() throws OperationImpossible {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.modifierClient(new Client("nom", "prenom"), "nom", "prenom", "addresse", "Premium", 20);
+    }
+
+    @Test
+    public void test_mediatheque_modifierClient_memeInfos() throws OperationImpossible {
+
+        String  nom = "guerard";
+        String  prenom = "aurelien";
+        String  adresse = "50 rue etienne dolet";
+        String  catClient = "Premium";
+        int code = 10;
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        Client client = new Client(nom, prenom, adresse, new CategorieClient(catClient));
+        mediatheque.modifierClient(client, nom, prenom, adresse, catClient, code);
+    }
+
+    @Test
+    public void test_mediatheque_modifierClient_sansCode_OK() throws OperationImpossible {
+
+        String catClient = "TOP 10 CLIENT";
+
+        String catClient2 = "TOP 15 CLIENT";
+
+        String  nom = "guerard";
+        String  prenom = "aurelien";
+        String  adresse = "50 rue etienne dolet";
+
+
+        String  nom2 = "guerar2d";
+        String  prenom2 = "aurel2ien";
+        String  adresse2 = "rue";
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        Client client = new Client(nom, prenom, adresse, new CategorieClient(catClient));
+        mediatheque.modifierClient(client, nom2, prenom2, adresse2, catClient2, 10);
+
+        //Vérifie des modif de nom, prenom, adresse, catClient
+        Client clientRsult = mediatheque.chercherClient(nom2, prenom2);
+        Assert.assertEquals(clientRsult.getAdresse(), adresse2);
+        Assert.assertEquals(clientRsult.getCategorie(), new CategorieClient(catClient2));
+        Assert.assertEquals(clientRsult.getCategorie(), new CategorieClient(catClient2));
+
+        //L'ancien ne doit plus exister
+        Assert.assertNull(mediatheque.chercherClient(nom, prenom));
+    }
+
+    @Test
+    public void test_mediatheque_modifierClient_avecCode_OK() throws OperationImpossible {
+        String catClient = "TOP 10 CLIENT";
+        int max = 2000;
+        double cot = 500;
+        double coefDuree = 15;
+        double coefTarif = 15;
+        boolean codeReducUsed = false;
+
+        String  nom = "guerard";
+        String  prenom = "aurelien";
+        String  adresse = "50 rue etienne dolet";
+
+
+        String  nom2 = "guerar2d";
+        String  prenom2 = "aurel2ien";
+        String  adresse2 = "rue";
+
+        String catClient2 = "Premium";
+        int code = 10;
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.ajouterCatClient(catClient, max, cot, coefDuree, coefTarif, codeReducUsed);
+
+        Client client = new Client(nom, prenom, adresse, new CategorieClient(catClient));
+        Client client2 = new Client(nom2, prenom2, adresse2, new CategorieClient(catClient));
+        mediatheque.modifierClient(client, nom2, prenom2, adresse2, catClient2, code);
+
+        //Vérifie des modif de nom, prenom, adresse, catClient
+        Client clientRsult = mediatheque.chercherClient(nom2, prenom2);
+        Assert.assertEquals(clientRsult.getAdresse(), adresse2);
+        Assert.assertEquals(clientRsult.getCategorie(), new CategorieClient(catClient2));
+        Assert.assertEquals(clientRsult.getCategorie(), new CategorieClient(catClient2));
+
+        //L'ancien ne doit plus exister
+        Assert.assertNull(mediatheque.chercherClient(nom, prenom));
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Client nom prenom non trouve")
+    public void test_mediatheque_changerCategorie_clientInconnu() throws OperationImpossible {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.changerCategorie("nom", "prenom", "Premium", 20);
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Categorie client catClientInconnu non trouvee")
+    public void test_mediatheque_changerCategorie_catClientInconnu() throws OperationImpossible {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.changerCategorie("guerard", "aurelien", "catClientInconnu", 20);
+    }
+
+    @Test
+    public void test_mediatheque_changerCategorie_avecCode_OK() throws OperationImpossible {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+        int code = 156;
+
+        String catClientAvecCode = "TOP 5 CLIENT";
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.changerCategorie(nom, prenom, catClientAvecCode, code);
+
+        Assert.assertEquals(mediatheque.chercherClient(nom, prenom).getReduc(), code);
+        Assert.assertEquals(mediatheque.chercherClient(nom, prenom).getCategorie().getNom(), catClientAvecCode);
+
+    }
+    @Test
+    public void test_mediatheque_changerCategorie_sansCode_OK() throws OperationImpossible {
+
+
+        String catClientSansCode = "TOP 15 CLIENT";
+        String nom = "guerard";
+        String prenom = "aurelien";
+        int code = 156;
+
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+
+        mediatheque.changerCategorie(nom, prenom, catClientSansCode, code);
+
+        Assert.assertEquals(mediatheque.chercherClient(nom, prenom).getReduc(), 0);
+        Assert.assertEquals(mediatheque.chercherClient(nom, prenom).getCategorie().getNom(), catClientSansCode);
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Client nom prenom non trouve")
+    public void test_mediatheque_changerCodeReduction_clientInconnu() throws OperationImpossible {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.changerCodeReduction("nom", "prenom", 20);
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Changement de code de reduction sur une categorie sans code")
+    public void test_mediatheque_changerCodeReduction_categorieSansCode() throws OperationImpossible {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.changerCodeReduction("georgel", "edgar", 20);
+    }
+
+    @Test
+    public void test_mediatheque_changerCodeReduction_OK() throws OperationImpossible {
+
+        String nom = "guerard";
+        String prenom = "aurelien";
+        int code = 154;
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.changerCodeReduction(nom, prenom, code);
+
+        Assert.assertEquals(mediatheque.chercherClient(nom, prenom).getReduc(), code);
+    }
+
+    @Test
+    public void test_mediatheque_chercherClient_clientInconnu() {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        Client client = mediatheque.chercherClient("nom", "prenom");
+
+        Assert.assertNull(client);
+    }
+
+    @Test
+    public void test_mediatheque_chercherClient_OK() {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+
+        Client client = mediatheque.chercherClient("guerard", "aurelien");
+
+        Assert.assertNotNull(client);
+    }
+
+    @Test
+    public void test_mediatheque_existeClient_vrai() {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        Assert.assertTrue(mediatheque.existeClient(new CategorieClient("Premium")));
+    }
+
+    @Test
+    public void test_mediatheque_existeClient_faux() {
+
+        Mediatheque mediatheque = new Mediatheque("mediatheque");
+
+        Assert.assertFalse(mediatheque.existeClient(new CategorieClient("TOP 10 CLIENT")));
+    }
 }
