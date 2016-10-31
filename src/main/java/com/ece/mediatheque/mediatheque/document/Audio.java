@@ -95,7 +95,6 @@ public class Audio extends Document {
          * du document en nombre de jours.
          *    @return Duree de pret
          */
-        @Override
         public int dureeEmprunt() {
                 return DUREE;
         }
@@ -105,10 +104,10 @@ public class Audio extends Document {
          * du document.
          *    @return Tarif du pret
          */
-        @Override
         public double tarifEmprunt() {
                 return TARIF;
         }
+
         @Override
         public String toString() {
                 return "[Audio] " + super.toString()

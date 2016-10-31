@@ -98,7 +98,6 @@ public final class Video extends Document {
          * du document en nombre de jours.
          *    @return Duree de pret
          */
-        @Override
         public int dureeEmprunt() { return DUREE; }
         
         /**
@@ -106,7 +105,6 @@ public final class Video extends Document {
          * du document.
          *    @return Tarif du pret
          */
-        @Override
         public double tarifEmprunt() { return TARIF; }
         
         public String getMentionLegale() { return mentionLegale; }
@@ -127,6 +125,6 @@ public final class Video extends Document {
          *  @return if document in safe state(i.e.dureeFilm > 0)
          */
         public boolean invariantVideo() {
-                return dureeFilm < 0 && super.invariant();
+                return dureeFilm > 60 && super.invariant();
         }
 }

@@ -1,4 +1,4 @@
-package com.ece.mediatheque.DocumentTest;
+package com.ece.mediatheque;
 
 
 import com.ece.mediatheque.mediatheque.Localisation;

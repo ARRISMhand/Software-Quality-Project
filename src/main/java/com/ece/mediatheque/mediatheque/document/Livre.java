@@ -55,7 +55,7 @@ public final class Livre extends Document {
                         ) throws OperationImpossible, InvariantBroken
         {
                 super(code, localisation, titre, auteur, annee, genre);
-                if (nombrePage < 0) {
+                if (nombrePage <= 0) {
                         throw new OperationImpossible("Ctr Livre nombrePage = "
                                         + nombrePage);
                 }
@@ -80,6 +80,7 @@ public final class Livre extends Document {
         @Override
         public boolean emprunter() throws InvariantBroken, OperationImpossible {
                 super.emprunter();
+                nbEmpruntsTotal++;
                 return true;
         }
         // Methodes de l'interface Empruntable
@@ -89,7 +90,6 @@ public final class Livre extends Document {
          * du document en nombre de jours.
          *    @return Duree de pret
          */
-        @Override
         public int dureeEmprunt() { return DUREE; }
 
         /**
@@ -97,7 +97,6 @@ public final class Livre extends Document {
          * du document.
          *    @return Tarif du pret
          */
-        @Override
         public double tarifEmprunt() { return TARIF; }
         /**
          *<TT>toString</TT> affiche les caracteristiques du Livre
@@ -105,8 +104,8 @@ public final class Livre extends Document {
          */
         @Override
         public String toString() {
-                return "[Livre] "/* + super.toString()
-                                +  " " + nombrePages*/;
+                return "[Livre] " + super.toString()
+                                +  " " + nombrePages;
         }
 
         /**
