@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
  */
 public class MediathequeTest {
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_saveToFile() throws OperationImpossible, InvariantBroken {
         Mediatheque mediatheque = new Mediatheque("mediatheque");
 
@@ -44,20 +44,34 @@ public class MediathequeTest {
         mediatheque.saveToFile();
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_inexistanteMediatheque() {
         Mediatheque mediatheque = new Mediatheque("inexistanteMediatheque");
         Assert.assertFalse(mediatheque.initFromFile());
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_exsitanteMediatheque() { //TODO: créer datafile
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
+        mediatheque.listerFicheEmprunts();
+        mediatheque.listerGenres();
+        mediatheque.listerCatsClient();
+        mediatheque.listerClients();
+        mediatheque.listerFicheEmprunts();
+        mediatheque.listerGenres();
+        mediatheque.listerDocuments();
+        mediatheque.listerLocalisations();
+        mediatheque.getCategorieAt(0);
+        mediatheque.getClientAt(0);
+        mediatheque.getDocumentAt(0);
+        mediatheque.getGenreAt(0);
+        mediatheque.getLocalisationAt(0);
+        mediatheque.getClientAt(0);
         Assert.assertTrue(mediatheque.initFromFile());
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_empty() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
@@ -71,14 +85,14 @@ public class MediathequeTest {
         Assert.assertTrue(mediatheque.getCategoriesSize() == 0);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherGenre_nonTrouve() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
         Assert.assertNull(mediatheque.chercherGenre("GenreInconnu"));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherGenre_OK() { //TODO: créer datafile
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
@@ -106,7 +120,7 @@ public class MediathequeTest {
         mediatheque.supprimerGenre("Guerre"); //TODO: Choisir le bon genre et le reporter dans l'exception
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_supprimerGenre_OK() throws OperationImpossible {
 
         String genre = "BD";
@@ -131,7 +145,7 @@ public class MediathequeTest {
 
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_ajouterGenre_OK() throws OperationImpossible {
 
         String genre = "Futuriste";
@@ -154,7 +168,7 @@ public class MediathequeTest {
         mediatheque.modifierGenre(old, modified);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierGenre_OK() throws OperationImpossible {
 
         String old = "BD";
@@ -169,14 +183,14 @@ public class MediathequeTest {
         Assert.assertNotNull(mediatheque.chercherGenre(modified));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherLocalisation_nonTrouve() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
         Assert.assertNull(mediatheque.chercherLocalisation("SalleInconnu", "RayonInconnu"));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherLocalisation_OK() { //TODO: créer datafile
 
         String salle = "Principale";
@@ -212,7 +226,7 @@ public class MediathequeTest {
         mediatheque.supprimerLocalisation(salle, rayon); //TODO: Choisir la bonne localisation et la reporter dans l'exception
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_supprimerLocalisation_OK() throws OperationImpossible {
 
         String salle = "Principale";
@@ -236,7 +250,7 @@ public class MediathequeTest {
         mediatheque.ajouterLocalisation(salle, rayon);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_ajouterLocalisation_OK() throws OperationImpossible {
 
         String salle = "Principale";
@@ -261,7 +275,7 @@ public class MediathequeTest {
         mediatheque.modifierLocalisation(new Localisation(salle, rayon), "sal", "loc");
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierLocalisation_memeLocalisation() throws OperationImpossible {
 
         String salle = "Principale";
@@ -275,7 +289,7 @@ public class MediathequeTest {
         Assert.assertNotNull(mediatheque.chercherLocalisation(salle, rayon));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierLocalisation_OK() throws OperationImpossible {
 
         String salle = "Principale";
@@ -293,14 +307,14 @@ public class MediathequeTest {
         Assert.assertNotNull(mediatheque.chercherLocalisation(nSalle, nRayon));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherCatClient_nonTrouve() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
         Assert.assertNull(mediatheque.chercherCatClient("CatClientInconnu"));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherCatClient_OK() {
 
         String nom = "Premium";
@@ -331,7 +345,7 @@ public class MediathequeTest {
         mediatheque.supprimerCatClient(catClient); //TODO: Choisir le bon catClient et le reporter dans l'exception
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_supprimerCatClient_OK() throws OperationImpossible {
 
         String catClient = "TOP 5 CLIENT";
@@ -359,7 +373,7 @@ public class MediathequeTest {
         mediatheque.ajouterCatClient(name, max, cot, coefDuree, coefTarif, codeReducUsed);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_ajouterCatClient_OK() throws OperationImpossible {
 
         String name = "TOP 3 CLIENT";
@@ -392,7 +406,7 @@ public class MediathequeTest {
         mediatheque.modifierCatClient(new CategorieClient(name, max, cot, coefDuree, coefTarif, codeReducUsed), "Denis", 1,  1, 1, 1, true);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierCatClient_CatClientIdentique() throws OperationImpossible {
 
         String name = "Premium";
@@ -410,7 +424,7 @@ public class MediathequeTest {
         Assert.assertNotNull(mediatheque.chercherCatClient(name));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierCatClient_OK() throws OperationImpossible {
 
         String name = "Premium";
@@ -484,7 +498,7 @@ public class MediathequeTest {
         mediatheque.ajouterDocument(new Livre(code, localisation, titre, auteur, annee, genre, nombrePage));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_ajouterDocument_OK() throws OperationImpossible, InvariantBroken {
 
         String code = "1523bd";
@@ -523,7 +537,7 @@ public class MediathequeTest {
         mediatheque.retirerDocument(code);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_retirerDocument_OK() throws OperationImpossible {
 
         String code = "01010";
@@ -544,7 +558,7 @@ public class MediathequeTest {
         mediatheque.metEmpruntable(code);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_metEmpruntable_OK() throws OperationImpossible, InvariantBroken {
 
         String code = "01010";
@@ -564,7 +578,7 @@ public class MediathequeTest {
         mediatheque.metConsultable(code);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_metConsultable_OK() throws OperationImpossible, InvariantBroken {
 
         String code = "01010";
@@ -663,7 +677,7 @@ public class MediathequeTest {
         mediatheque.emprunter(nom, prenom, code);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_emprunter_OK() throws OperationImpossible, InvariantBroken {
 
         String nom = "guerard";
@@ -727,7 +741,7 @@ public class MediathequeTest {
         mediatheque.restituer(nom, prenom, code2);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_restituer_OK() throws OperationImpossible, InvariantBroken {
 
         String nom = "guerard";
@@ -755,7 +769,7 @@ public class MediathequeTest {
         mediatheque.inscrire("nom", "prenom", "rue", "CatInconnue");
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_inscrire_sansCode_OK() throws OperationImpossible {
 
         String nom = "gorge";
@@ -776,7 +790,7 @@ public class MediathequeTest {
         Assert.assertTrue(mediatheque.chercherClient(nom, prenom) != null);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_inscrire_avecCode_OK() throws OperationImpossible {
 
         String nom = "gorge";
@@ -831,7 +845,7 @@ public class MediathequeTest {
         mediatheque.resilier(nom, prenom);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_resilier_OK() throws OperationImpossible {
 
         String nom = "guerard";
@@ -851,7 +865,7 @@ public class MediathequeTest {
         mediatheque.modifierClient(new Client("nom", "prenom"), "nom", "prenom", "addresse", "Premium", 20);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierClient_memeInfos() throws OperationImpossible {
 
         String  nom = "guerard";
@@ -864,7 +878,7 @@ public class MediathequeTest {
         mediatheque.modifierClient(client, nom, prenom, adresse, catClient, code);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierClient_sansCode_OK() throws OperationImpossible {
 
         String catClient = "TOP 10 CLIENT";
@@ -895,7 +909,7 @@ public class MediathequeTest {
         Assert.assertNull(mediatheque.chercherClient(nom, prenom));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_modifierClient_avecCode_OK() throws OperationImpossible {
         String catClient = "TOP 10 CLIENT";
         int max = 2000;
@@ -947,7 +961,7 @@ public class MediathequeTest {
         mediatheque.changerCategorie("guerard", "aurelien", "catClientInconnu", 20);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_changerCategorie_avecCode_OK() throws OperationImpossible {
 
         String nom = "guerard";
@@ -962,7 +976,7 @@ public class MediathequeTest {
         Assert.assertEquals(mediatheque.chercherClient(nom, prenom).getCategorie().getNom(), catClientAvecCode);
 
     }
-    @Test
+    @org.junit.Test
     public void test_mediatheque_changerCategorie_sansCode_OK() throws OperationImpossible {
 
 
@@ -997,7 +1011,7 @@ public class MediathequeTest {
         mediatheque.changerCodeReduction("georgel", "edgar", 20);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_changerCodeReduction_OK() throws OperationImpossible {
 
         String nom = "guerard";
@@ -1010,7 +1024,7 @@ public class MediathequeTest {
         Assert.assertEquals(mediatheque.chercherClient(nom, prenom).getReduc(), code);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherClient_clientInconnu() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
@@ -1020,7 +1034,7 @@ public class MediathequeTest {
         Assert.assertNull(client);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_chercherClient_OK() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
@@ -1031,7 +1045,7 @@ public class MediathequeTest {
         Assert.assertNotNull(client);
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_existeClient_vrai() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
@@ -1039,7 +1053,7 @@ public class MediathequeTest {
         Assert.assertTrue(mediatheque.existeClient(new CategorieClient("Premium")));
     }
 
-    @Test
+    @org.junit.Test
     public void test_mediatheque_existeClient_faux() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");

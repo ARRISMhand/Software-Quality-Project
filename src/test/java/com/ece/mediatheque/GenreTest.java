@@ -15,6 +15,7 @@ public class GenreTest {
         Genre genre = new Genre("livre");
         Assert.assertEquals(genre.getNbEmprunts(), 1);
         genre.emprunter();
+        genre.afficherStatistiques();
         Assert.assertEquals(genre.getNbEmprunts(), 2);
     }
 
