@@ -30,7 +30,7 @@ public class LivreTest {
                 titre, auteur, annee, genre, nbPages);
     }
 
-    @Test
+    @org.junit.Test
     public void test_livre_constructeur_OK() throws OperationImpossible, InvariantBroken {
 
         String code = "444";
@@ -55,7 +55,7 @@ public class LivreTest {
         Assert.assertEquals(livre.estEmpruntable(), false);
     }
 
-    @Test
+    @org.junit.Test
     public void test_livre_emprunter_OK() throws OperationImpossible, InvariantBroken {
 
         String code = "444";

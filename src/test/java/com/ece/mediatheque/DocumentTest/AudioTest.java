@@ -28,7 +28,7 @@ public class AudioTest {
                 titre, auteur, annee, genre, null);
     }
 
-    @Test
+    @org.junit.Test
     public void test_audio_constructeur_OK() throws OperationImpossible, InvariantBroken {
         String classification = "BD";
         String code = "444";
@@ -51,7 +51,7 @@ public class AudioTest {
         Assert.assertEquals(audio.estEmpruntable(), false);
     }
 
-    @Test
+    @org.junit.Test
     public void test_audio_emprunter_OK() throws OperationImpossible, InvariantBroken {
 
         String classification = "BD";

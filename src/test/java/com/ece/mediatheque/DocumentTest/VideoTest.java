@@ -47,7 +47,7 @@ public class VideoTest {
                 titre, auteur, annee, genre, dureeFilm, mentionLegale);
     }
 
-    @Test
+    @org.junit.Test
     public void test_video_constructeur_OK() throws OperationImpossible, InvariantBroken {
         String code = "444";
         Localisation localisation = new Localisation("salle", "rayon");
@@ -68,12 +68,13 @@ public class VideoTest {
         Assert.assertEquals(video.getAnnee(), annee);
         Assert.assertEquals(video.getGenre(), genre);
         Assert.assertEquals(video.getDureeFilm(), dureeFilm);
+        Assert.assertEquals(video.dureeEmprunt(), 14);
         Assert.assertEquals(video.getMentionLegale(), mentionLegale);
         Assert.assertEquals(video.getNbEmprunts(), 0);
         Assert.assertEquals(video.estEmpruntable(), false);
     }
 
-    @Test
+    @org.junit.Test
     public void test_video_emprunter_OK() throws OperationImpossible, InvariantBroken {
 
         String code = "444";

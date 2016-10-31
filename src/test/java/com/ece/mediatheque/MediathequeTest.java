@@ -362,7 +362,7 @@ public class MediathequeTest {
     @Test
     public void test_mediatheque_ajouterCatClient_OK() throws OperationImpossible {
 
-        String name = "TOP 10 CLIENT";
+        String name = "TOP 3 CLIENT";
         int max = 2000;
         double cot = 500;
         double coefDuree = 15;
@@ -601,7 +601,7 @@ public class MediathequeTest {
         String titre = "titre";
         String auteur = "auteur";
         String annee = "1999";
-        Genre genre = new Genre("BD");
+        Genre genre = new Genre("Guerre");
         int nombrePage = 252;
         FicheEmprunt ficheEmprunt;
         Livre l;
@@ -916,7 +916,6 @@ public class MediathequeTest {
         String catClient2 = "Premium";
         int code = 10;
         Mediatheque mediatheque = new Mediatheque("mediatheque");
-        mediatheque.ajouterCatClient(catClient, max, cot, coefDuree, coefTarif, codeReducUsed);
 
         Client client = new Client(nom, prenom, adresse, new CategorieClient(catClient));
         Client client2 = new Client(nom2, prenom2, adresse2, new CategorieClient(catClient));
