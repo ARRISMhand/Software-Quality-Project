@@ -3,14 +3,11 @@ package com.ece.mediatheque.clientTest;
 import com.ece.mediatheque.mediatheque.*;
 import com.ece.mediatheque.mediatheque.client.CategorieClient;
 import com.ece.mediatheque.mediatheque.client.Client;
-import com.ece.mediatheque.mediatheque.document.Document;
-import com.ece.mediatheque.mediatheque.document.DocumentImpl;
 import com.ece.mediatheque.util.Datutil;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
 import java.util.Date;
-import java.util.Vector;
 
 /**
  * Created by Edgar on 25/10/2016.
@@ -22,13 +19,15 @@ public class ClientTest { //TestNG for testing exceptions
         Client client = new Client("Denis", "Denise");
         Assert.assertEquals("Denis", client.getNom());
         Assert.assertEquals("Denise", client.getPrenom());
+        Assert.assertEquals( Datutil.dateDuJour(), client.getDateInscription());
+        Assert.assertEquals(Datutil.addDate(Datutil.dateDuJour(), 365), client.getDateCotisation());
     }
 
     @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,
             expectedExceptionsMessageRegExp = "Call with client type denis and no reduction code")
     public void test_create_client_with_nom_prenom_adresse_categorieClient_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
     }
 
@@ -44,7 +43,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_create_client_with_nom_prenom_adresse_categorieClient()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         Assert.assertEquals("Denis", client.getNom());
         Assert.assertEquals("Denise", client.getPrenom());
@@ -79,7 +78,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_equals_Symmetric()
             throws Exception {// equals and hashCode check name field value
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client x = new Client("Denis", "Denise", "Paris", categorieClient);
         Client y = new Client("Denis", "Denise", "Paris", categorieClient);
         Assert.assertTrue(x.equals(y) && y.equals(x));
@@ -89,7 +88,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_notEquals()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client x = new Client("DenisX", "Denise", "Paris", categorieClient);
         Client y = new Client("Denis", "Denise", "Paris", categorieClient);
         Assert.assertFalse(x.equals(y) && y.equals(x));
@@ -100,7 +99,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_peutEmprunter_return_false()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         client.emprunter();
         client.emprunter();
@@ -110,7 +109,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_peutEmprunter_return_true()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         Assert.assertTrue(client.peutEmprunter());
     }
@@ -118,7 +117,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_aDesEmpruntsEnCours_return_false()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         Assert.assertFalse(client.aDesEmpruntsEnCours());
     }
@@ -126,7 +125,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_aDesEmpruntsEnCours_return_true()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
         client.emprunter(mock);
@@ -137,7 +136,7 @@ public class ClientTest { //TestNG for testing exceptions
             expectedExceptionsMessageRegExp = "emprunt is null")
     public void test_emprunter_null_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         client.emprunter(null);
     }
@@ -146,7 +145,7 @@ public class ClientTest { //TestNG for testing exceptions
             expectedExceptionsMessageRegExp = "Can not borrow")
     public void test_emprunter_with_peutEmprunter_false_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         client.emprunter();
         client.emprunter();
@@ -158,7 +157,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_emprunter_2()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
         FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
@@ -174,7 +173,7 @@ public class ClientTest { //TestNG for testing exceptions
             expectedExceptionsMessageRegExp = "Restituer sans emprunt 0")
     public void test_restituer_input_false_AND_nbEmpruntsEnCours_0_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         client.restituer(false);
     }
@@ -182,7 +181,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_restituer_input_false_AND_nbEmpruntsEnCours_1()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
         client.emprunter(mock);
@@ -197,7 +196,7 @@ public class ClientTest { //TestNG for testing exceptions
             expectedExceptionsMessageRegExp = "Restituer en retard sans retard 0")
     public void test_restituer_input_true_AND_nbEmpruntsDepasses_0_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
         client.emprunter(mock);
@@ -209,7 +208,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_restituer_input_ture_AND_nbEmpruntsEnCours_1_nbEmpruntsDepasses_0()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
         client.emprunter(mock);
@@ -225,7 +224,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_restiuer_with_FicheEmprunt()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
         client.emprunter(mock);
@@ -237,7 +236,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_afficherStatCli()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
         FicheEmprunt mock = Mockito.mock(FicheEmprunt.class);
         client.emprunter(mock);
@@ -249,7 +248,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_dateRetour()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
         Date today = new Date();
@@ -261,12 +260,12 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_sommeDue()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 0, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 0, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
         Assert.assertEquals(0,client.sommeDue(5), 0);
 
-        CategorieClient categorieClient1 = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient1 = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client1 = new Client("Denis", "Denise", "Paris", categorieClient1);
 
         Assert.assertEquals(1.2*5,client1.sommeDue(5), 0);
@@ -276,7 +275,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_nbMaxEmprunt()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
         Assert.assertEquals(2, client.nbMaxEmprunt());
@@ -286,20 +285,20 @@ public class ClientTest { //TestNG for testing exceptions
             expectedExceptionsMessageRegExp = "Categorie necessite un code de reduction")
     public void test_setCategorie_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
-        CategorieClient categorieClient1 = new CategorieClient("denis1", 1000, 10.2, 1.1, 1.2, false);
+        CategorieClient categorieClient1 = new CategorieClient("denis1", 1000, 10.2, 1.1, 1.2, true);
         client.setCategorie(categorieClient1);
     }
 
     @org.testng.annotations.Test
     public void test_setCategorie()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
-        CategorieClient categorieClient1 = new CategorieClient("denis1", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient1 = new CategorieClient("denis1", 1000, 10.2, 1.1, 1.2, false);
         client.setCategorie(categorieClient1);
         Assert.assertEquals(categorieClient1, client.getCategorie());
     }
@@ -308,7 +307,7 @@ public class ClientTest { //TestNG for testing exceptions
             expectedExceptionsMessageRegExp = "Categorie sans code de reduction")
     public void test_setCategorie_with_code_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
         CategorieClient categorieClient1 = new CategorieClient("denis1", 1000, 10.2, 1.1, 1.2, false);
@@ -318,7 +317,7 @@ public class ClientTest { //TestNG for testing exceptions
     @org.testng.annotations.Test
     public void test_setCategorie_with_code()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, true);
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
         CategorieClient categorieClient1 = new CategorieClient("denis1", 1000, 10.2, 1.1, 1.2, true);

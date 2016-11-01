@@ -102,7 +102,7 @@ public class FicheEmprunt implements Serializable {
          * <TT>relancer</TT> verifie si l'emprunt est depasse, auquel cas
          * il faudra relancer le client retardataire.
          */
-        private void relancer() {
+        public void relancer() {
                 Date dateActuelle = Datutil.dateDuJour();
                 if (depasse && rappel != null) {
                         Date dateRelance = Datutil.addDate(rappel.getDateRappel(), 7);
@@ -110,7 +110,6 @@ public class FicheEmprunt implements Serializable {
                                 rappel.relancer();
                         }
                 }
-                return;
         }
 
         /**
@@ -177,7 +176,6 @@ public class FicheEmprunt implements Serializable {
          * @return boolean true si l'emprunt etait depasse
          */
         public boolean changementCategorie() throws OperationImpossible {
-                boolean oldDepasse = depasse;
                 if (depasse) {
                         rappel = null;
                         depasse = false;
@@ -185,7 +183,7 @@ public class FicheEmprunt implements Serializable {
                 int duree = document.dureeEmprunt();
                 dateLimite = client.dateRetour(dateEmprunt, duree);
                 verifier();
-                return oldDepasse;
+                return depasse;
         }
 
         /**
@@ -208,5 +206,17 @@ public class FicheEmprunt implements Serializable {
          */
         public static void afficherStatistiques() {
                 System.out.println("Nombre total d'emprunts = " + nbEmpruntsTotal);
+        }
+
+        public int getNbEmpruntsTotal() {
+                return nbEmpruntsTotal;
+        }
+
+        public LettreRappel getRappel() {
+                return rappel;
+        }
+
+        public void setDateLimite(Date date) {
+                dateLimite = date;
         }
 }

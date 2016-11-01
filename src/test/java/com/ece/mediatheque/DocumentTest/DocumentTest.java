@@ -13,16 +13,13 @@ import org.junit.Assert;
 import org.mockito.Mock;
 import org.testng.annotations.Test;
 
-/**
- * Created by DamnAug on 31/10/2016.
- */
+
 public class DocumentTest {
 
 
     @Test(expectedExceptions=OperationImpossible.class,
     expectedExceptionsMessageRegExp = "Ctr Document arguments = code : null, localisation : null, titre : null, auteur : null, annee : null, genre : null")
     public void test_document_constructeur_null() throws OperationImpossible, InvariantBroken {
-
 
         Document document = new Audio(null, null,
                 null, null, null, null, null);

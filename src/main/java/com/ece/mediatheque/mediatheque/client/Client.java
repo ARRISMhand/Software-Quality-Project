@@ -87,9 +87,9 @@ public class Client implements Serializable {
         public Client(String nom, String prenom, String adresse, CategorieClient catClient)
                         throws OperationImpossible {
                 initAttr(nom, prenom, adresse, catClient);
-//                if (!catClient.getCodeReducUtilise()) {
-//                        throw new OperationImpossible("Call with client type " + this.catClient.getNom() + " and no reduction code");
-//                }
+                if (catClient.getCodeReducUtilise()) {
+                        throw new OperationImpossible("Call with client type " + this.catClient.getNom() + " and no reduction code");
+                }
         }
 
         /**
@@ -117,6 +117,9 @@ public class Client implements Serializable {
         public Client(String nom, String prenom) {
                 this.nom = nom;
                 this.prenom = prenom;
+                lesEmprunts = new Vector<FicheEmprunt>();
+                dateInscription = Datutil.dateDuJour();
+                dateRenouvellement = Datutil.addDate(dateInscription, 365);
         }
 
         /**
