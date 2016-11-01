@@ -39,7 +39,7 @@ public class LettreRappel implements Serializable{
          * Constructeur de lettre de rappel avec le corps minimal
          * le constructeur fait un affichage de la lettre de rappel
          */
-        LettreRappel(String nomMedia, FicheEmprunt emprunt) {
+        public LettreRappel(String nomMedia, FicheEmprunt emprunt) {
                 dateRappel = emprunt.getDateLimite();
                 this.nomMedia = nomMedia;
                 this.enRetard = emprunt;
@@ -63,7 +63,7 @@ public class LettreRappel implements Serializable{
          * <TT>relancer</TT> renouvelle le rappel 
          * (affiche de nouveau la lettre de rappel)
          */
-        void relancer() {
+        public void relancer() {
                 dateRappel = Datutil.dateDuJour();
                 System.out.println(debut());
                 System.out.println("Rappel : ");
