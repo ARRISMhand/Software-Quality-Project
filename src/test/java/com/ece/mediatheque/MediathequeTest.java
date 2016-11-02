@@ -6,6 +6,7 @@ import com.ece.mediatheque.mediatheque.client.Client;
 import com.ece.mediatheque.mediatheque.document.Livre;
 import com.ece.mediatheque.util.InvariantBroken;
 import org.junit.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
@@ -14,7 +15,7 @@ import org.testng.annotations.Test;
  */
 public class MediathequeTest {
 
-    @org.junit.Test
+    @BeforeClass
     public void test_mediatheque_saveToFile() throws OperationImpossible, InvariantBroken {
         Mediatheque mediatheque = new Mediatheque("mediatheque");
 
