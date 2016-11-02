@@ -98,7 +98,7 @@ public class VideoTest {
     }
 
     @Test(expectedExceptions=InvariantBroken.class,
-    expectedExceptionsMessageRegExp = "Video -[Video] \"444\" titre auteur 1995 Genre: genre, nbemprunts:1 Salle/Rayon : salle/rayon 0 SAFE  40 mention")
+    expectedExceptionsMessageRegExp = "Video - code : 444")
     public void test_video_invariantVideo_dureeCourte() throws OperationImpossible, InvariantBroken {
 
         String code = "444";

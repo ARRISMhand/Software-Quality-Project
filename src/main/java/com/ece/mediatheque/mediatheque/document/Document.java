@@ -196,11 +196,11 @@ public abstract class Document implements Empruntable, Serializable, HasInvarian
          */
         public void metEmpruntable() throws OperationImpossible, InvariantBroken {
                 if (empruntable) {
-                        throw new OperationImpossible("Document metEmpruntable empruntable" + this);
+                        throw new OperationImpossible("Document metEmpruntable empruntable " + empruntable + " code : " + code);
                 }
                 empruntable = true;
                 if (!invariant()) {
-                        throw new InvariantBroken("Document -" + this);
+                        throw new InvariantBroken("Document -" + this.getCode());
                 }
         }
 

@@ -66,7 +66,7 @@ public final class Video extends Document {
                 this.dureeFilm = dureeFilm;
                 this.mentionLegale = mentionLegale;
                 if (!invariantVideo()) {
-                        throw new InvariantBroken("Video -" + this);
+                        throw new InvariantBroken("Video - code : " + code);
                 }
         }
 

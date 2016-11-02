@@ -89,7 +89,7 @@ public class DocumentTest {
     }
 
     @Test(expectedExceptions=OperationImpossible.class,
-            expectedExceptionsMessageRegExp = "Document metEmpruntable empruntable[Audio] \"444\" titre auteur 1995 Genre: genre, nbemprunts:1 Salle/Rayon : salle/rayon 0 (emp N) SAFE  BD")
+            expectedExceptionsMessageRegExp = "Document metEmpruntable empruntable true code : 444")
     public void test_document_metEmpruntable_dejaEmpruntable() throws OperationImpossible, InvariantBroken {
 
     String classification = "BD";
@@ -109,7 +109,7 @@ public class DocumentTest {
 
 
     @Test(expectedExceptions=OperationImpossible.class,
-            expectedExceptionsMessageRegExp = "Document metEmpruntable empruntable[Audio] \"444\" titre auteur 1995 Genre: genre, nbemprunts:1 Salle/Rayon : salle/rayon 1 (emp O) SAFE  BD")
+            expectedExceptionsMessageRegExp = "Document metEmpruntable empruntable true code : 444")
     public void test_document_metEmpruntable_invariant() throws OperationImpossible, InvariantBroken {
 
         String classification = "BD";
