@@ -443,13 +443,14 @@ public class MediathequeTest {
         boolean nCodeReducUsed = true;
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
+        CategorieClient c = new CategorieClient(name, max, cot, coefDuree, coefTarif, codeReducUsed);
+        mediatheque.modifierCatClient(c , nName, nMax, nCot, nCoefDuree, nCoefTarif, nCodeReducUsed);
 
-        mediatheque.modifierCatClient(new CategorieClient(name, max, cot, coefDuree, coefTarif, codeReducUsed), nName, nMax, nCot, nCoefDuree, nCoefTarif, nCodeReducUsed);
-
+        CategorieClient newC = new CategorieClient(nName, nMax, nCot, nCoefDuree, nCoefTarif, nCodeReducUsed);
         // L'ancienne ne doit plus exister
         Assert.assertNull(mediatheque.chercherCatClient(name));
         // La nouvelle doit exister
-        Assert.assertNotNull(mediatheque.chercherCatClient(nName));
+        Assert.assertTrue(mediatheque.chercherCatClient(nName).equals(newC));
     }
 
     @Test(expectedExceptions=OperationImpossible.class,
