@@ -3,7 +3,6 @@ package com.ece.mediatheque;
 import com.ece.mediatheque.mediatheque.*;
 import com.ece.mediatheque.mediatheque.client.CategorieClient;
 import com.ece.mediatheque.mediatheque.client.Client;
-import com.ece.mediatheque.mediatheque.document.Document;
 import com.ece.mediatheque.mediatheque.document.Livre;
 import com.ece.mediatheque.util.InvariantBroken;
 import org.junit.Assert;
@@ -36,6 +35,8 @@ public class MediathequeTest {
 
         mediatheque.ajouterDocument(new Livre("01010", new Localisation("Principale", "Aventure"), "titre", "auteur", "2000", new Genre("Guerre"), 258 ));
         mediatheque.ajouterDocument(new Livre("010111", new Localisation("Principale", "Aventure"), "essay", "dupont", "2000", new Genre("Guerre"), 258 ));
+        mediatheque.ajouterDocument(new Livre("88888", new Localisation("Principale", "Aventure"), "jine", "bebe", "2000", new Genre("Manga"), 154 ));
+
 
         mediatheque.inscrire("guerard", "aurelien", "50 rue etienne dolet", "Premium", 10);
         mediatheque.inscrire("Denis", "Marchant", "50 rue des poulets", "TOP 5 CLIENT", 20);
@@ -1038,7 +1039,6 @@ public class MediathequeTest {
     public void test_mediatheque_chercherClient_OK() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
-
 
         Client client = mediatheque.chercherClient("guerard", "aurelien");
 
