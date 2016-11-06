@@ -19,6 +19,28 @@ public class CategorieclientTest {
         Assert.assertEquals(1.2, categorieClient.getCoefTarif(), 0);
         Assert.assertTrue(categorieClient.getCodeReducUtilise());
     }
+
+    @Test
+    public void test_categorieClient_modifierCotisation_OK() {
+
+        String name = "Premium";
+        int max = 2;
+        double cot = 5;
+        double coefDuree = 1.5;
+        double coefTarif = 1.5;
+        boolean codeReducUsed = false;
+
+        double nCot = 6;
+
+        // Creation object CategorieClient
+        CategorieClient c = new CategorieClient(name, max, cot, coefDuree, coefTarif, codeReducUsed);
+        // Modification de la cotisation
+        c.modifierCotisation(nCot);
+        //Verification de la modification
+        Assert.assertTrue(c.getCotisation() == nCot);
+
+    }
+
     @Test
     public void test_create_categoreClient_with_nom() {
         CategorieClient categorieClient = new CategorieClient("denis");

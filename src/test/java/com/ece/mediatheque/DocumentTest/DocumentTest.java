@@ -128,7 +128,61 @@ public class DocumentTest {
         document.metEmpruntable();
     }
 
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Document non empruntable code : 444")
+    public void test_document_emprunter_nonEmpruntable() throws OperationImpossible, InvariantBroken {
 
+        String classification = "BD";
+        String code = "444";
+        Localisation localisation = new Localisation("salle", "rayon");
+        String titre = "titre";
+        String auteur = "auteur";
+        String annee = "1995";
+        Genre genre = new Genre("genre");
+
+        Document document = new Audio(code, localisation,
+                titre, auteur, annee, genre, classification);
+
+        document.emprunter();
+    }
+
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Impossible de restituer un document non empruntable")
+    public void test_document_restituer_nonEmpruntable() throws OperationImpossible, InvariantBroken {
+
+        String classification = "BD";
+        String code = "444";
+        Localisation localisation = new Localisation("salle", "rayon");
+        String titre = "titre";
+        String auteur = "auteur";
+        String annee = "1995";
+        Genre genre = new Genre("genre");
+
+        Document document = new Audio(code, localisation,
+                titre, auteur, annee, genre, classification);
+
+        document.restituer();
+    }
+
+    @Test(expectedExceptions=OperationImpossible.class,
+            expectedExceptionsMessageRegExp = "Impossible de restituer un document non emprunte")
+    public void test_document_restituer_nonEmprunte() throws OperationImpossible, InvariantBroken {
+
+        String classification = "BD";
+        String code = "444";
+        Localisation localisation = new Localisation("salle", "rayon");
+        String titre = "titre";
+        String auteur = "auteur";
+        String annee = "1995";
+        Genre genre = new Genre("genre");
+
+        Document document = new Audio(code, localisation,
+                titre, auteur, annee, genre, classification);
+
+        document.metEmpruntable();
+        document.restituer();
+    }
 }
 
 

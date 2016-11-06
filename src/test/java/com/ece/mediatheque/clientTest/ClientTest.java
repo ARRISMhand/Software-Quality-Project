@@ -21,6 +21,7 @@ public class ClientTest { //TestNG for testing exceptions
         Assert.assertEquals("Denise", client.getPrenom());
         Assert.assertEquals( Datutil.dateDuJour(), client.getDateInscription());
         Assert.assertEquals(Datutil.addDate(Datutil.dateDuJour(), 365), client.getDateCotisation());
+        Assert.assertNotNull(client.getLesEmprunts());
     }
 
     @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,
@@ -54,10 +55,10 @@ public class ClientTest { //TestNG for testing exceptions
     }
 
     @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,
-            expectedExceptionsMessageRegExp = "Call with client type denis and reduction code")
+            expectedExceptionsMessageRegExp = "Call with client type catClient and reduction code")
     public void test_create_client_with_nom_prenom_adresse_categorieClient_code_should_throw_exception()
             throws Exception {
-        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
+        CategorieClient categorieClient = new CategorieClient("catClient", 1000, 10.2, 1.1, 1.2, false);
         Client client = new Client("Denis", "Denise", "Paris", categorieClient, 10);
     }
 
@@ -279,6 +280,20 @@ public class ClientTest { //TestNG for testing exceptions
         Client client = new Client("Denis", "Denise", "Paris", categorieClient);
 
         Assert.assertEquals(2, client.nbMaxEmprunt());
+    }
+
+    @org.testng.annotations.Test
+    public void test_nbEmpruntsEnRetard_OK() throws OperationImpossible {
+
+        CategorieClient categorieClient = new CategorieClient("denis", 1000, 10.2, 1.1, 1.2, false);
+        Client client = new Client("Denis", "Denise", "Paris", categorieClient);
+
+        //Emprunter
+        client.emprunter();
+        //Mettre l'emprunt en retard
+        client.marquer();
+        //Verifier que le nombre emprunts non rendu dans les délais est de 1
+        Assert.assertTrue(client.getNbEmpruntsDepasses() == 1);
     }
 
     @org.testng.annotations.Test(expectedExceptions = OperationImpossible.class,

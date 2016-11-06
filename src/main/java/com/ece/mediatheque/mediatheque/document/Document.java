@@ -232,7 +232,7 @@ public abstract class Document implements Empruntable, Serializable, HasInvarian
          */
         public boolean emprunter() throws InvariantBroken, OperationImpossible{
                 if (!empruntable) {
-                        throw new OperationImpossible("Document non empruntable" + this);
+                        throw new OperationImpossible("Document non empruntable code : " + this.getCode());
                 }
                 if (emprunte) {
                         throw new OperationImpossible("Deja Emprunte"+ this);
@@ -266,7 +266,7 @@ public abstract class Document implements Empruntable, Serializable, HasInvarian
                 emprunte = false;
                 // check invariant after modifying internal state
                 if (!invariant()) {
-                        throw new InvariantBroken("Document -" + this);
+                        throw new InvariantBroken("Document -" + this.getCode());
                 }
                 System.out.println("Document: ranger \"" + titre + "\" en "
                                 + localisation);

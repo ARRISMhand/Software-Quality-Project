@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
  */
 public class MediathequeTest {
 
-    @BeforeClass
+    @org.junit.Test
     public void test_mediatheque_saveToFile() throws OperationImpossible, InvariantBroken {
         Mediatheque mediatheque = new Mediatheque("mediatheque");
 
@@ -53,7 +53,7 @@ public class MediathequeTest {
     }
 
     @org.junit.Test
-    public void test_mediatheque_exsitanteMediatheque() { //TODO: créer datafile
+    public void test_mediatheque_exsitanteMediatheque() {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
         mediatheque.listerFicheEmprunts();
@@ -449,7 +449,7 @@ public class MediathequeTest {
         CategorieClient newC = new CategorieClient(nName, nMax, nCot, nCoefDuree, nCoefTarif, nCodeReducUsed);
         // L'ancienne ne doit plus exister
         Assert.assertNull(mediatheque.chercherCatClient(name));
-        // La nouvelle doit exister
+        // La nouvelle doit exister et les paramètres doivent etre ceux renseignés
         Assert.assertTrue(mediatheque.chercherCatClient(nName).equals(newC));
     }
 
@@ -612,13 +612,16 @@ public class MediathequeTest {
 
         Mediatheque mediatheque = new Mediatheque("mediatheque");
 
+        mediatheque.ajouterGenre("Genre");
+        mediatheque.ajouterGenre("GenreAutre");
+
         Client client = mediatheque.chercherClient(nom, prenom);
         String code = "1523bd";
         Localisation localisation = new Localisation("Principale", "Aventure");
         String titre = "titre";
         String auteur = "auteur";
         String annee = "1999";
-        Genre genre = new Genre("Guerre");
+        Genre genre = new Genre("Genre");
         int nombrePage = 252;
         FicheEmprunt ficheEmprunt;
         Livre l;
@@ -630,7 +633,7 @@ public class MediathequeTest {
         ficheEmprunt = new FicheEmprunt(mediatheque, client, l);
 
         code = "1423bd";
-        l = new Livre(code, localisation, titre, auteur, annee, genre, nombrePage);
+        l = new Livre(code, localisation, titre, auteur, annee, new Genre("GenreAutre"), nombrePage);
         mediatheque.ajouterDocument(l);
         mediatheque.chercherDocument(code).metEmpruntable();
         ficheEmprunt = new FicheEmprunt(mediatheque, client, l);

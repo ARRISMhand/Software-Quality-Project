@@ -69,7 +69,7 @@ public class CategorieClient implements Serializable {
         }
 
         public void modifierCotisation(double cot) {
-                cotisation = cot; // TODO: lol
+                cotisation = cot; // TODO
         }
 
         public void modifierCoefDuree(double coefDuree) {

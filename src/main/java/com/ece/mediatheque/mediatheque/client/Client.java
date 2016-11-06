@@ -190,7 +190,7 @@ public class Client implements Serializable {
          * @return nombre d'emprunts en retard
          */
         public int getNbEmpruntsEnRetard() {
-                return 0;
+                return nbEmpruntsDepasses;
         }
 
         /**
@@ -398,7 +398,6 @@ public class Client implements Serializable {
          *   @return Date limite de restitution du document
          */
         public Date dateRetour(Date jour, int duree) {
-//                duree = (int) ((double) duree * catClient.getCoefDuree());
                 return Datutil.addDate(jour, duree);
         }
 
